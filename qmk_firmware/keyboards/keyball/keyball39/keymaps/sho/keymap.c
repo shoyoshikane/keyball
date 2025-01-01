@@ -69,3 +69,14 @@ void oledkit_render_info_user(void) {
     keyball_oled_render_layerinfo();
 }
 #endif
+
+// コンボキーの定義
+const uint16_t PROGMEM combo_jk[]  = {KC_J, KC_K, COMBO_END};
+const uint16_t PROGMEM combo_kl[]  = {KC_K, KC_L, COMBO_END};
+const uint16_t PROGMEM combo_jkl[] = {KC_J, KC_K, KC_L, COMBO_END};
+
+combo_t key_combos[] = {
+    COMBO(combo_jk, KC_BTN1),  // j + k → マウス左クリック
+    COMBO(combo_kl, KC_BTN2),  // k + l → マウス右クリック
+    COMBO(combo_jkl, KC_BTN3), // j + k + l → マウスホイールクリック
+};

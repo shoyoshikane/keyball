@@ -19,6 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include QMK_KEYBOARD_H
 
 #include "quantum.h"
+#include "lib/keyball/keyball.h"
 
 // clang-format off
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -80,3 +81,32 @@ combo_t key_combos[] = {
     COMBO(combo_kl, KC_BTN2),  // k + l → マウス右クリック
     COMBO(combo_jkl, KC_BTN3), // j + k + l → マウスホイールクリック
 };
+
+// 加速度係数の増加率
+const float ACCELERATION_SCALE = (ACCELERATION_FACTOR_MAX - ACCELERATION_FACTOR_MIN) / (MOTION_THRESHOLD_MAX - MOTION_THRESHOLD_MIN);
+
+// 加速度係数を計算
+static inline float calculate_acceleration_factor(int16_t motion_magnitude) {
+    if (motion_magnitude <= MOTION_THRESHOLD_MIN) {
+        return ACCELERATION_FACTOR_MIN;
+    } else if (motion_magnitude >= MOTION_THRESHOLD_MAX) {
+        return ACCELERATION_FACTOR_MAX;
+    }
+    return ACCELERATION_FACTOR_MIN + (motion_magnitude - MOTION_THRESHOLD_MIN) * ACCELERATION_SCALE;
+}
+
+static inline int8_t clip2int8(int16_t v) {
+    return (v) < -127 ? -127 : (v) > 127 ? 127 : (int8_t)v;
+}
+
+// カーソル移動処理をオーバーライドし、加速度を適用
+void keyball_on_apply_motion_to_mouse_move(keyball_motion_t *m, report_mouse_t *r, bool is_left) {
+    int16_t motion_magnitude    = abs(m->x) + abs(m->y);
+    float   acceleration_factor = calculate_acceleration_factor(motion_magnitude);
+
+    r->x = clip2int8((int16_t)((float)m->y * acceleration_factor));
+    r->y = clip2int8((int16_t)((float)m->x * acceleration_factor));
+
+    m->x = 0;
+    m->y = 0;
+}

@@ -38,6 +38,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define POINTING_DEVICE_AUTO_MOUSE_ENABLE
 #define AUTO_MOUSE_DEFAULT_LAYER 1
 
+#define KEYBALL_CPI_DEFAULT 200
+#define KEYBALL_SCROLL_DIV_DEFAULT 5
+#define KEYBALL_SCROLLSNAP_ENABLE 0
+#define DYNAMIC_KEYMAP_LAYER_COUNT 5
+
 // 加速度関連の定数
 #define ACCELERATION_FACTOR_MIN 0.5f
 #define ACCELERATION_FACTOR_MAX 6.0f

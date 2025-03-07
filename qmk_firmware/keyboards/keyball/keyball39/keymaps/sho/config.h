@@ -46,5 +46,5 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // 加速度関連の定数
 #define ACCELERATION_FACTOR_MIN 0.5f
 #define ACCELERATION_FACTOR_MAX 6.0f
-#define MOTION_THRESHOLD_MIN 10
+#define MOTION_THRESHOLD_MIN 5
 #define MOTION_THRESHOLD_MAX 30
